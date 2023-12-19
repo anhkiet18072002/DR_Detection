@@ -224,12 +224,12 @@ def red_lesion_segmentation(img):
 #---------------------MAIN-----------------------
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
 # Đọc ảnh và tiền xử lý
-OrgImg = cv2.imread(r'D:\document\95IDEAL\code\DR_detection\OpenCV\images\IM8074.JPG')
+OrgImg = cv2.imread(r'D:\document\95IDEAL\code\DR_detection\OpenCV\images\vang.png')
 OrgImg = cv2.resize(OrgImg,(550,380))
 green_channel = OrgImg[:,:,1]
 
 blood_vessels = extract_bv(OrgImg)
-
+cv2.imshow('blood_vessels',blood_vessels)
 gray = cv2.cvtColor(OrgImg,cv2.COLOR_BGR2GRAY)
 median_filter_size = 69
 Imed = cv2.medianBlur(gray, median_filter_size)
@@ -301,7 +301,6 @@ enhanced_green_new = clahe.apply(green_channel_removed)
 # Create a blank image with the same size as the original image
 enhanced_image_new = cv2.merge((OrgImg_removed[:,:,0], enhanced_green_new, OrgImg_removed[:,:,2]))
 # Display the enhanced image
-cv2.imshow('Enhanced Image', enhanced_image_new)
 red_lesion = red_lesion_segmentation(enhanced_image_new)
 
 
@@ -309,13 +308,8 @@ red_lesion = red_lesion_segmentation(enhanced_image_new)
 cv2.imshow('Original Image', OrgImg)
 cv2.imshow('Exudate Image', exduate)
 cv2.imshow('OD Image', result_image)
-cv2.imshow('Original Image remove', OrgImg_removed)
 cv2.imshow('red_lesion', red_lesion)
 OrgImg_removed[np.where(red_lesion)] = [0, 0, 0]
 cv2.imshow('Segmentation',OrgImg_removed)
-# cv2.imshow('Expanded Image', expanded_image)
-# cv2.imshow('Median Filtered Image2', output_image)
-# cv2.imshow("Blood Vessels", blood_vessels)
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
